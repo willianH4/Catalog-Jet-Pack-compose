@@ -56,7 +56,9 @@ class MainActivity : ComponentActivity() {
 //                    Column() {
 //                        MyTextFieldOutlined()
 //                    }
-                    MyButtonExample()
+//                    MyButtonExample()
+//                    MyProgress()
+                    MyProgressAdvance()
                 }
             }
         }
@@ -431,6 +433,54 @@ fun MyIcon() {
     )
 }
 
+@Composable
+fun MyProgressAdvance() {
+    var progressStatus by rememberSaveable {
+        mutableStateOf(0f)
+    }
+    Column(
+        Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        CircularProgressIndicator(progress = progressStatus)
+        
+        Row(Modifier.fillMaxWidth()) {
+            Button(onClick = { progressStatus += 0.1f }) {
+                Text(text = "Incrementar")
+            }
+            Button(onClick = { progressStatus -= 0.1f }) {
+                Text(text = "Reducir")
+            }
+        }
+    }
+}
+
+@Composable
+fun MyProgress() {
+    var showLoading by rememberSaveable {
+        mutableStateOf( false )
+    }
+    Column(
+        Modifier
+            .padding(24.dp)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        CircularProgressIndicator(color = Color.Red, strokeWidth = 10.dp)
+        LinearProgressIndicator(
+            modifier = Modifier.padding(top = 32.dp),
+            color = Color.Red,
+            backgroundColor = Color.Green
+        )
+    }
+    
+    Button(onClick = { showLoading = !showLoading }) {
+        Text(text = "Cargar Perfil")
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
@@ -448,5 +498,7 @@ fun DefaultPreview() {
 //        MyImage()
 //        MyImageAdvance()
 //        MyIcon()
+//        MyProgress()
+        MyProgressAdvance()
     }
 }
