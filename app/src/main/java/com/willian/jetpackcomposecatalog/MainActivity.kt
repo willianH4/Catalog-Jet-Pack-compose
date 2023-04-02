@@ -58,7 +58,8 @@ class MainActivity : ComponentActivity() {
 //                    }
 //                    MyButtonExample()
 //                    MyProgress()
-                    MyProgressAdvance()
+//                    MyProgressAdvance()
+                    MySwitch()
                 }
             }
         }
@@ -481,6 +482,27 @@ fun MyProgress() {
     }
 }
 
+@Composable
+fun MySwitch() {
+    // siempre se usaran estados
+    var state by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    Switch(checked = state, onCheckedChange = { state = !state }, enabled = true, colors = SwitchDefaults.colors(
+        uncheckedThumbColor = Color.Red,
+        uncheckedTrackColor = Color.Magenta,
+        checkedThumbColor = Color.Green,
+        checkedTrackColor = Color.Cyan,
+        checkedTrackAlpha = 0.5f,
+        uncheckedTrackAlpha = 0.3f,
+        disabledCheckedTrackColor = Color.Yellow,
+        disabledCheckedThumbColor = Color.Yellow,
+        disabledUncheckedThumbColor = Color.Yellow,
+        disabledUncheckedTrackColor = Color.Yellow
+    ))
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
@@ -499,6 +521,7 @@ fun DefaultPreview() {
 //        MyImageAdvance()
 //        MyIcon()
 //        MyProgress()
-        MyProgressAdvance()
+//        MyProgressAdvance()
+        MySwitch()
     }
 }
