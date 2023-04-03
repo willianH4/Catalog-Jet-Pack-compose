@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -61,9 +62,10 @@ class MainActivity : ComponentActivity() {
 //                    MySwitch()
                     // llamando objeto temporal
                     val myOptions = getOptions(listOf("Willian", "Goku", "Rambo"))
-                    Column() {
+                    Column {
 //                        MyTextFieldOutlined()
 //                        MyCheckBoxWithText()
+                        MyTryStatusCheckBox()
                         myOptions.forEach{
                             MyCheckBoxWithTextComplete(it)
                         }
@@ -72,6 +74,20 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+
+@Composable
+fun MyTryStatusCheckBox() {
+    var status by rememberSaveable {
+        mutableStateOf(ToggleableState.Off)
+    }
+    TriStateCheckbox(state = status, onClick = {
+       status = when( status ) {
+           ToggleableState.On -> ToggleableState.Off
+           ToggleableState.Off -> ToggleableState.Indeterminate
+           ToggleableState.Indeterminate -> ToggleableState.On
+        }
+    })
 }
 
 @Composable
