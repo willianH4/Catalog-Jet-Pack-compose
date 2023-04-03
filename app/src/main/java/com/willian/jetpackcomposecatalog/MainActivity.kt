@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.willian.jetpackcomposecatalog.model.CheckInfo
 import com.willian.jetpackcomposecatalog.ui.theme.JetpackComposeCatalogTheme
 
 class MainActivity : ComponentActivity() {
@@ -53,17 +54,39 @@ class MainActivity : ComponentActivity() {
 //                    MyTextField(myText) {myText = it}
 
 //                    MyTextFieldAdvance()
-//                    Column() {
-//                        MyTextFieldOutlined()
-//                    }
+
 //                    MyButtonExample()
 //                    MyProgress()
 //                    MyProgressAdvance()
-                    MySwitch()
+//                    MySwitch()
+                    // llamando objeto temporal
+                    val myOptions = getOptions(listOf("Willian", "Goku", "Rambo"))
+                    Column() {
+//                        MyTextFieldOutlined()
+//                        MyCheckBoxWithText()
+                        myOptions.forEach{
+                            MyCheckBoxWithTextComplete(it)
+                        }
+                    }
                 }
             }
         }
     }
+}
+
+@Composable
+fun getOptions(titles: List<String>): List<CheckInfo> {
+    return titles.map {
+        var status by rememberSaveable {
+            mutableStateOf(false)
+        }
+        CheckInfo(
+            title = it,
+            selected = status,
+            onCheckedChange = { myNewStatus -> status = myNewStatus }
+        )
+    }
+
 }
 
 @Composable
@@ -383,14 +406,14 @@ fun MyButtonExample() { // botones
         ) {
             Text(text = "Hola!!!")
         }
-        
+
         OutlinedButton(
             onClick = { enabled = false },
             enabled = enabled, // deshabilita o habilita el boton
             modifier = Modifier.padding(top = 8.dp),
             colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color.Magenta,
-            contentColor = Color.Blue,
+                backgroundColor = Color.Magenta,
+                contentColor = Color.Blue,
                 disabledBackgroundColor = Color.Blue, // colores segun estado de los botones
                 disabledContentColor = Color.Red
             ),
@@ -445,7 +468,7 @@ fun MyProgressAdvance() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CircularProgressIndicator(progress = progressStatus)
-        
+
         Row(Modifier.fillMaxWidth()) {
             Button(onClick = { progressStatus += 0.1f }) {
                 Text(text = "Incrementar")
@@ -460,7 +483,7 @@ fun MyProgressAdvance() {
 @Composable
 fun MyProgress() {
     var showLoading by rememberSaveable {
-        mutableStateOf( false )
+        mutableStateOf(false)
     }
     Column(
         Modifier
@@ -476,7 +499,7 @@ fun MyProgress() {
             backgroundColor = Color.Green
         )
     }
-    
+
     Button(onClick = { showLoading = !showLoading }) {
         Text(text = "Cargar Perfil")
     }
@@ -489,18 +512,67 @@ fun MySwitch() {
         mutableStateOf(false)
     }
 
-    Switch(checked = state, onCheckedChange = { state = !state }, enabled = true, colors = SwitchDefaults.colors(
-        uncheckedThumbColor = Color.Red,
-        uncheckedTrackColor = Color.Magenta,
-        checkedThumbColor = Color.Green,
-        checkedTrackColor = Color.Cyan,
-        checkedTrackAlpha = 0.5f,
-        uncheckedTrackAlpha = 0.3f,
-        disabledCheckedTrackColor = Color.Yellow,
-        disabledCheckedThumbColor = Color.Yellow,
-        disabledUncheckedThumbColor = Color.Yellow,
-        disabledUncheckedTrackColor = Color.Yellow
-    ))
+    Switch(
+        checked = state,
+        onCheckedChange = { state = !state },
+        enabled = true,
+        colors = SwitchDefaults.colors(
+            uncheckedThumbColor = Color.Red,
+            uncheckedTrackColor = Color.Magenta,
+            checkedThumbColor = Color.Green,
+            checkedTrackColor = Color.Cyan,
+            checkedTrackAlpha = 0.5f,
+            uncheckedTrackAlpha = 0.3f,
+            disabledCheckedTrackColor = Color.Yellow,
+            disabledCheckedThumbColor = Color.Yellow,
+            disabledUncheckedThumbColor = Color.Yellow,
+            disabledUncheckedTrackColor = Color.Yellow
+        )
+    )
+}
+
+@Composable
+fun MyCheckbox() {
+    // contiene los mismos atributos que el switch
+    // checkbox basico
+    var state by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    Checkbox(
+        checked = state,
+        onCheckedChange = { state = !state },
+        enabled = true,
+        colors = CheckboxDefaults.colors(
+            checkedColor = Color.Red,
+            uncheckedColor = Color.Yellow,
+            checkmarkColor = Color.Blue
+        )
+    )
+}
+
+@Composable
+fun MyCheckBoxWithText() {
+    var state by rememberSaveable {
+        mutableStateOf(false)
+    }
+    Row(Modifier.padding(8.dp)) {
+        Checkbox(checked = state, onCheckedChange = { state = !state })
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = "Ejemplo 1")
+    }
+}
+
+@Composable
+fun MyCheckBoxWithTextComplete(checkInfo: CheckInfo) {
+
+    Row(Modifier.padding(8.dp)) {
+        Checkbox(
+            checked = checkInfo.selected,
+            onCheckedChange = { checkInfo.onCheckedChange(!checkInfo.selected) })
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = checkInfo.title)
+    }
 }
 
 @Preview(showBackground = true)
@@ -522,6 +594,8 @@ fun DefaultPreview() {
 //        MyIcon()
 //        MyProgress()
 //        MyProgressAdvance()
-        MySwitch()
+//        MySwitch()
+//        MyCheckbox()
+        MyCheckBoxWithText()
     }
 }
