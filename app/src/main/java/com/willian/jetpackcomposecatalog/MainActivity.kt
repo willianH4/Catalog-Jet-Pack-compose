@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -62,16 +64,65 @@ class MainActivity : ComponentActivity() {
 //                    MySwitch()
                     // llamando objeto temporal
                     val myOptions = getOptions(listOf("Willian", "Goku", "Rambo"))
+                    var selected by remember {
+                        mutableStateOf( "Willian" )
+                    }
                     Column {
 //                        MyTextFieldOutlined()
 //                        MyCheckBoxWithText()
-                        MyTryStatusCheckBox()
-                        myOptions.forEach{
-                            MyCheckBoxWithTextComplete(it)
-                        }
+//                        MyTryStatusCheckBox()
+//                        myOptions.forEach{
+//                            MyCheckBoxWithTextComplete(it)
+//                        }
+//                        MyRadioButton()
+                        MyRadioButtonList(selected) { selected = it } // listado de radioButton con stateHosting
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun MyRadioButton() {
+    Row(Modifier.fillMaxWidth()) {
+        RadioButton(
+            selected = false, onClick = { }, colors = RadioButtonDefaults.colors(
+                selectedColor = Color.Red,
+                unselectedColor = Color.Yellow,
+                disabledColor = Color.Green
+            )
+        )
+        Text(text = "Ejemplo 1")
+    }
+}
+
+@Composable
+fun MyRadioButtonList(name: String, onItemSelected:(String) -> Unit) {
+    
+    Column(Modifier.fillMaxWidth()) {
+        Row() {
+            RadioButton(
+                selected = name == "David", onClick = { onItemSelected("David") })
+            Text(text = "David")
+        }
+
+        Row() {
+            RadioButton(
+                selected = name == "Maria", onClick = { onItemSelected("Maria") })
+            Text(text = "Maria")
+        }
+
+        Row() {
+            RadioButton(
+                selected = name == "Juan", onClick = { onItemSelected("Juan") })
+            Text(text = "Juan")
+        }
+
+        Row() {
+            RadioButton(
+                selected = name == "Willian", onClick = { onItemSelected("Willian") })
+            Text(text = "Willian")
         }
     }
 }
@@ -82,10 +133,10 @@ fun MyTryStatusCheckBox() {
         mutableStateOf(ToggleableState.Off)
     }
     TriStateCheckbox(state = status, onClick = {
-       status = when( status ) {
-           ToggleableState.On -> ToggleableState.Off
-           ToggleableState.Off -> ToggleableState.Indeterminate
-           ToggleableState.Indeterminate -> ToggleableState.On
+        status = when (status) {
+            ToggleableState.On -> ToggleableState.Off
+            ToggleableState.Off -> ToggleableState.Indeterminate
+            ToggleableState.Indeterminate -> ToggleableState.On
         }
     })
 }
@@ -591,6 +642,82 @@ fun MyCheckBoxWithTextComplete(checkInfo: CheckInfo) {
     }
 }
 
+// COMPONENT BADGE BOX
+@Composable
+fun MyBadgeBox() {
+    BadgedBox(badge = { Badge { Text("1") } }, Modifier.padding(16.dp) ) {
+        Icon(imageVector = Icons.Default.Star, contentDescription = "")
+    }
+}
+
+// COMPONENT DIVIDER
+// es la clasica linea divisora entre elementos de la view
+@Composable
+fun MyDivider() {
+    Divider(
+        Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp), color = Color.Red)
+}
+
+// CARD COMPONENT
+@Composable
+fun MyCard() {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        elevation = 12.dp,
+        shape = MaterialTheme.shapes.medium,
+        backgroundColor = Color.Cyan,
+        contentColor = Color.DarkGray,
+        border = BorderStroke(5.dp, Color.Green)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = "Ejemplo 1")
+            Text(text = "Ejemplo 2")
+            Text(text = "Ejemplo 3")
+        }
+    }
+}
+
+// COMPONENTE DROPDOWN MENU REEMPLAZA AL SPINNERITEM
+@Composable
+fun MyDropDownMenu() {
+    var selectedTex by remember {
+        mutableStateOf("")
+    }
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+    val desserts = listOf("Helado", "Chocolate", "Cafe", "Frutas")
+    Column(Modifier.padding(20.dp)) {
+        OutlinedTextField(
+            value = selectedTex,
+            onValueChange = { selectedTex = it },
+            enabled = false,
+            readOnly = true,
+            modifier = Modifier
+                .clickable { expanded = true }
+                .fillMaxWidth()
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            Modifier.fillMaxWidth()
+        ) {
+            desserts.forEach { dessert ->
+                DropdownMenuItem(onClick = {
+                    expanded = false
+                    selectedTex = dessert
+                }) {
+                    Text(text = dessert)
+                }
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
@@ -612,6 +739,11 @@ fun DefaultPreview() {
 //        MyProgressAdvance()
 //        MySwitch()
 //        MyCheckbox()
-        MyCheckBoxWithText()
+//        MyCheckBoxWithText()
+//        MyRadioButton()
+//        MyRadioButtonList()
+//        MyCard()
+//        MyBadgeBox()
+//        MyDivider()
     }
 }
