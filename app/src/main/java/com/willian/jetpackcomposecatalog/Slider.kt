@@ -1,3 +1,4 @@
+package com.willian.jetpackcomposecatalog
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.RangeSlider
